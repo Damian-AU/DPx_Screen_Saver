@@ -1,13 +1,11 @@
-
-# Change package name for you extension / plugin
 set plugin_name "DPx_Screen_Saver"
 
 namespace eval ::plugins::${plugin_name} {
     # These are shown in the plugin selection page
     variable author "Damian"
     variable contact "via Diaspora"
-    variable version 1.3
-    variable description "A plugin that allows users to select an alternate screen saver directory, for skins that don't already do so"
+    variable version 1.4
+    variable description "A plugin that allows users to select an alternate screen saver directory, for skins that don't already do so. ** Use .jpg images only! **"
 
     proc build_ui {} {
         # Unique name per page
@@ -41,9 +39,9 @@ namespace eval ::plugins::${plugin_name} {
             return "I could not find MySaver/${::screen_size_width}x${::screen_size_height} folder\r If you tap  **HERE** I'll create them for you"
         }
         set dir "[homedir]/MySaver/${::screen_size_width}x${::screen_size_height}"
-        set file_list [glob -nocomplain "$dir/*"]
+        set file_list [glob -nocomplain "$dir/*.jpg"]
         if {[llength $file_list] == 0} {
-            return "I found your MySaver/${::screen_size_width}x${::screen_size_height} folder, but the folder is empty\r\rOnce you have added your image files, restart the app\r to direct the screen saver settings to your new images\r\rEnsure you use image files\r${::screen_size_width} pixels wide & ${::screen_size_height} pixels high\rso they fit your display correctly"
+            return "I found your MySaver/${::screen_size_width}x${::screen_size_height} folder, but no .jpg files\r\rOnce you have added .jpg image files, restart the app\r to direct the screen saver settings to your new .jpg images\r\rEnsure you use .jpg image files\r${::screen_size_width} pixels wide & ${::screen_size_height} pixels high\rso they fit your display correctly"
         }
         return "MySaver/${::screen_size_width}x${::screen_size_height} found with [llength $file_list] files\r\rAll looks good!"
     }
@@ -58,15 +56,8 @@ namespace eval ::plugins::${plugin_name} {
 
     }
 
-    # This file will be sourced to display meta-data. Dont put any code into the
-    # general scope as there are no guarantees about when it will be run.
-    # For security reasons it is highly unlikely you will find the plugin in the
-    # official distribution if you are not beeing run from your main
-    # REQUIRED
-
     proc main {} {
         check_MySaver_exists
         plugins gui DPx_Screen_Saver [build_ui]
     }
 }
-
